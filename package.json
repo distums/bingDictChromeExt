@@ -1,0 +1,15 @@
+{
+  "name": "bingDictChromeExt",
+  "version": "0.0.0",
+  "description": "bing dictionary chrome extension",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": {
+    "name": "distums",
+    "email": "yiqidaoshan@gmail.com"
+  },
+  "license": "MIT"
+}
