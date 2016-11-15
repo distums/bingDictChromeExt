@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "bingDictChromeExt",
+  "description": "bing dictionary chrome extension",
+  "version": "1.0.0",
+  "icons": {
+    "16": "assets/bing@16x16.png",
+    "24": "assets/bing@24x24.png",
+    "48": "assets/bing@48x48.png",
+    "128": "assets/bing@128x128.png"
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "必应词典"
+  },
+  "permissions": [
+    "activeTab",
+    "http://cn.bing.com/dict/search"
+  ]
+}

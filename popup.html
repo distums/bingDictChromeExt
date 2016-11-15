@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>必应词典</title>
+    <style>
+      .search-form {
+        display: flex;
+        width: 300px;
+      }
+
+      .search-form input {
+        flex: 1;
+        margin-right: 10px;
+        height: 25px;
+      }
+    </style>
+</head>
+<body>
+  <section>
+    <form action="http://cn.bing.com/dict/search" method="get" id="form">
+      <div class="search-form">
+        <input type="text" name="query" required placeholder="keyword">
+        <button type="submit" disabled>查询</button>
+      </div>
+    </form>
+  </section>
+  <section id="result">
+
+  </section>
+  <script src="./popup.js"></script>
+</body>
+</html>
