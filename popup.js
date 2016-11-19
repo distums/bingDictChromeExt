@@ -4,34 +4,42 @@
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.querySelector('#form');
   var result = document.querySelector('#result');
+  var loading = document.querySelector('#loading');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
+    toggle(loading);
     var key = form['query'].value;
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        result.innerText = JSON.stringify(extractResponse(xhr.responseText));
+      if (xhr.readyState === 4) {
+        toggle(loading);
+        if(xhr.status === 200) {
+          result.innerText = JSON.stringify(extractResponse(xhr.responseText));
+        }
       }
     };
     xhr.open("GET", form.action + '?q=' + key, true);
     xhr.send();
   }, false);
 
-  form.querySelector('input').addEventListener('input',function (e) {
+  form.querySelector('input').addEventListener('input', function (e) {
     form.querySelector('button').disabled = !e.target.value;
   });
 }, false);
 
+/**
+ * extract json result from response html
+ * @param responseText response html from bing dictionary
+ * @returns {{word, pronounces, lang}}
+ */
 function extractResponse(responseText) {
   var temp = document.createElement('div');
   temp.innerHTML = responseText;
   var container = temp.querySelector('.qdef');
-  var basic = extractBasic(container.children[0]);
-  var translate = extractTranslate(container.children[1]);
-  return [basic, translate].reduce(function (prev, current) {
-    return Object.assign(prev, current);
-  });
+  return [extractBasic, extractTranslate].reduce(function (result, current, index) {
+    return Object.assign(result, current(container.children[index]));
+  }, {});
 }
 
 function extractBasic(doc) {
@@ -69,4 +77,13 @@ function extractTranslate(doc) {
       });
     })
   })
+}
+
+/**
+ * toggle display status of html element
+ * @param element html element
+ */
+function toggle(element) {
+  var oldDisplay = element.style.display;
+  element.style.display = oldDisplay === 'none' ? 'block' : 'none';
 }
