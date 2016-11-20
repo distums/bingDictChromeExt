@@ -12,6 +12,7 @@
 
       body {
         padding: 15px;
+        font-size: 14px;
       }
 
       .search-form {
@@ -57,6 +58,30 @@
       #loading img{
         width: 40px;
       }
+
+      .translate ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .translate .translate__header {
+        font-size: 30px;
+        margin-top: 10px;
+        margin-bottom: 0;
+      }
+
+      .translate .translate__pronounces {
+        margin-top: 5px;
+      }
+
+      .translate .translate__pronounces li{
+        display: inline-block;
+      }
+
+      .translate .translate__def {
+        margin-top: 5px;
+      }
     </style>
 </head>
 <body>
@@ -71,7 +96,7 @@
   <section id="loading" style="display: none">
     <img src="./assets/loading-bubbles.svg" alt="加载中">
   </section>
-  <section id="result">
+  <section id="result" class="translate">
   </section>
   <script src="./popup.js"></script>
 </body>

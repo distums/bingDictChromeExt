@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         toggle(loading);
-        if(xhr.status === 200) {
-          result.innerText = JSON.stringify(extractResponse(xhr.responseText));
+        if (xhr.status === 200) {
+          result.innerHTML = render(extractResponse(xhr.responseText));
         }
       }
     };
@@ -86,4 +86,19 @@ function extractTranslate(doc) {
 function toggle(element) {
   var oldDisplay = element.style.display;
   element.style.display = oldDisplay === 'none' ? 'block' : 'none';
+}
+
+function render(translateData) {
+  var pronounces = Array.isArray(translateData.pronounces)
+    ? translateData.pronounces.map(function (pronounce) {
+    return `<li>${pronounce.locale}</li>`;
+  }).join(' ') : `<li>${translateData.pronounces}</li>`;
+  var translates = translateData.translates.map((item)=> {
+    return `<li><strong>${item.pos}</strong> ${item.def}</li>`;
+  }).join(' ');
+  return (`
+    <h1 class="translate__header">${translateData.word}</h1>
+    <ul class="translate__pronounces">${pronounces}</ul>
+    <ul class="translate__def">${translates}</ul>
+  `);
 }
