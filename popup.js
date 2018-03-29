@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function generateContent(next) {
     return (...args) =>
       next(...args).then(translation => {
-        resultElement.innerText = JSON.stringify(translation);
+        console.log(translation);
+        resultElement.innerHTML = convertToHtml(translation);
       });
   }
 
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return (...args) => {
       return next(...args).then(response => {
         const container = response.querySelector('.qdef');
-        return [extractBasic, extractTranslate].reduce(
+        return [extractBasic, extractTranslate, extractPluralForm].reduce(
           (result, current, index) =>
             Object.assign(result, current(container.children[index])),
           {}
@@ -130,10 +131,27 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+function convertToHtml(translation) {
+  return `
+    <dl>
+      <dt>翻译：</dt>
+      ${translation.translates
+        .map(item => `<dd><strong>${item.pos}：</strong>${item.def}</dd>`)
+        .join('\n')}
+    </dl>
+    <dl>
+        <dt>复数：</dt>
+        <dd>${translation.plural}</dd>
+    </dl>
+  `;
+}
+
 function compose(...fns) {
   const fnList = fns.filter(fn => typeof fn === 'function');
   if (fnList.length === 0)
-    throw new Error('Argument error, at least one `function` should be provided');
+    throw new Error(
+      'Argument error, at least one `function` should be provided'
+    );
   return fnList.reduce((f, g) => (...args) => f(g(...args)));
 }
 
@@ -181,6 +199,13 @@ function extractTranslate(doc) {
         def: item.querySelector('.def').innerText,
       };
     }),
+  };
+}
+
+function extractPluralForm(doc) {
+  const anchor = doc.querySelector('.hd_div1 .hd_if a');
+  return {
+    plural: anchor.innerText,
   };
 }
 

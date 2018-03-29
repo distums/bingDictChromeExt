@@ -2,6 +2,9 @@ html,
 body {
   margin: 0;
   padding: 0;
+  font-size: 16px;
+
+  --main-color: #4db6ac;
 }
 
 body {
@@ -11,7 +14,7 @@ body {
 h1 {
   margin: 0;
   font-family: monospace, sans-serif;
-  color: #4db6ac;
+  color: var(--main-color);
 }
 
 .search-form {
@@ -26,7 +29,7 @@ h1 {
   height: 30px;
   font-size: 15px;
   border: none;
-  border-bottom: 1px solid #4db6ac;
+  border-bottom: 1px solid var(--main-color);
   outline: none;
 }
 
@@ -60,4 +63,18 @@ h1 {
 
 #loading img {
   width: 40px;
+}
+
+#result dl {
+  margin: 10px 0;
+}
+
+#result dl dt {
+  font-size: 1rem;
+}
+
+#result dl dd {
+  margin-left: 0;
+  margin-top: 5px;
+  font-size: 0.875rem;
 }
