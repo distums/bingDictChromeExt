@@ -15,6 +15,6 @@
   },
   "permissions": [
     "activeTab",
-    "http://cn.bing.com/dict/search"
+    "*://cn.bing.com/dict/search"
   ]
 }
