@@ -14,7 +14,7 @@
   <form action="https://cn.bing.com/dict/search" method="get" id="form">
     <div class="search-form">
       <input type="text" name="query" required placeholder="keyword">
-      <button type="submit" disabled name="submit">
+      <button type="submit" disabled name="submitBtn">
         <img src="./assets/search.svg" alt="查询">
       </button>
     </div>
@@ -22,7 +22,7 @@
   <section id="loading" style="display: none">
     <img src="./assets/loading-bubbles.svg" alt="加载中...">
   </section>
-  <section id="result">
+  <section id="result" style="display:block">
   </section>
   <script src="./popup.js"></script>
 </body>

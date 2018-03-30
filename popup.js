@@ -4,23 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const loadingElement = document.querySelector('#loading');
   const { action: url, method } = formElement;
 
-  formElement.addEventListener('submit', function(e) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    const { value: query } = formElement.elements['query'];
-    compose(
-      withLastWordNotModified,
-      withLoading,
-      generateContent,
-      withCache,
-      extractResponse
-    )(fetchTranslation)(query);
-  });
-
-  formElement.elements['query'].addEventListener('input', function(e) {
-    formElement.elements['submit'].disabled = !e.target.value;
-  });
-
   /**
    * If the word to be translated is the same as last word, nothing happens.
    *
@@ -45,12 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
   function withLoading(next) {
     return (...args) => {
       toggle(loadingElement);
+      toggle(resultElement);
       return next(...args).then(
         () => {
           toggle(loadingElement);
+          toggle(resultElement);
         },
         () => {
           toggle(loadingElement);
+          toggle(resultElement);
         }
       );
     };
@@ -129,6 +115,31 @@ document.addEventListener('DOMContentLoaded', function() {
       xhr.send();
     });
   }
+
+  const submitHandler = compose(
+    withLastWordNotModified,
+    withLoading,
+    generateContent,
+    withCache,
+    extractResponse
+  )(fetchTranslation);
+
+  formElement.addEventListener('submit', function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const { value: query } = formElement.elements['query'];
+    submitHandler(query);
+  });
+
+  formElement.elements['query'].addEventListener('input', function(e) {
+    formElement.elements['submitBtn'].disabled = !e.target.value;
+  });
+
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    formElement.elements['query'].value = request.word;
+    formElement.elements['submitBtn'].disabled = false;
+    formElement.elements['submitBtn'].click();
+  });
 });
 
 function convertToHtml(translation) {
@@ -191,9 +202,7 @@ function extractBasic(doc) {
 
 function extractTranslate(doc) {
   return {
-    translates: Array.prototype.map.call(doc.querySelectorAll('li'), function(
-      item
-    ) {
+    translates: Array.prototype.map.call(doc.querySelectorAll('li'), item => {
       return {
         pos: item.querySelector('.pos').innerText,
         def: item.querySelector('.def').innerText,
@@ -215,5 +224,5 @@ function extractPluralForm(doc) {
  */
 function toggle(element) {
   const oldDisplay = element.style.display;
-  element.style.display = oldDisplay === 'none' ? 'block' : 'none';
+  element.style.display = oldDisplay === 'block' ? 'none' : 'block';
 }

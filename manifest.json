@@ -13,8 +13,11 @@
     "default_popup": "popup.html",
     "default_title": "必应词典"
   },
-  "permissions": [
-    "activeTab",
-    "*://cn.bing.com/dict/search"
+  "permissions": ["activeTab", "*://cn.bing.com/dict/search"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
   ]
 }
